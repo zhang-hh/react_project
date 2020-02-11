@@ -4,6 +4,42 @@ import logo from './img/logo.png'; //引入图片要用一个变量去接
 import './css/login.less';
 const {Item} = Form;//从Form身上拿到Item
 class Login extends Component {
+	/*
+			用户名/密码的的合法性要求
+				1). 必须输入
+				2). 必须大于等于4位
+				3). 必须小于等于12位
+				4). 必须是英文、数字或下划线组成
+		*/
+	/*自定义密码校验器
+	validator这个属性的属性值是一个函数,只要密码发生变换的时候,就会调用
+	接收三个参数,rule.value,callback,rule是底层的我们并不关注,value是输入的值
+	注意是callback要被调用,当用户输入不合法的时候显示提示文本
+	*/
+	passwordValidator = (rule,value,callback) =>{
+		if(!value){
+			callback('密码必须输入')
+		}else if(value.length < 4){
+			callback('密码必须大于等于4位')
+		}else if(value.length>12){
+			callback('密码必须小于等于12位')
+		}else if(!(/^\w+$/.test(value))){
+			callback('密码必须是英文、数字或下划线组成')
+		}else {
+			callback()
+		}
+	}
+	//响应表单的提交
+	handleSubmit = (event) =>{
+	    event.preventDefault();//阻止表单提交的默认行为
+	//	获取表单的用户输入
+		this.props.form.validateFields((err, values) => {
+			if (!err){
+				//如果输入的用户名和密码均没有问题,发送网络请求
+				console.log('发送网络请求', values);
+			}
+		})
+	}
 	render() {
 		const { getFieldDecorator } = this.props.form;//通过From.create加工了新组件,加工之后向Login传递了form属性
 		return (
@@ -24,6 +60,7 @@ class Login extends Component {
 									3). 必须小于等于12位
 									4). 必须是英文、数字或下划线组成
 							*/}
+							{/*声明式校验*/}
 							{getFieldDecorator('username', {//想要进行校验,就有这个获取装饰域方法
 								rules: [
 									{ required: true, message: '请输入你的用户名!' },
@@ -39,8 +76,11 @@ class Login extends Component {
 							)}
 						</Item>
 						<Item>
+							{/*密码的自定义校验 属性值是validator*/}
 							{getFieldDecorator('password', {
-								rules: [{ required: true, message: '密码必须输入' }],
+								rules: [
+									{validator:this.passwordValidator}
+								],
 							})(
 								<Input
 									prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
