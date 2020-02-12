@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Form, Icon, Input, Button } from 'antd';
+import axios from 'axios';
 import logo from './img/logo.png'; //引入图片要用一个变量去接
 import './css/login.less';
 const {Item} = Form;//从Form身上拿到Item
@@ -34,9 +35,15 @@ class Login extends Component {
 	    event.preventDefault();//阻止表单提交的默认行为
 	//	获取表单的用户输入
 		this.props.form.validateFields((err, values) => {
+			const {username,password} = values;
 			if (!err){
 				//如果输入的用户名和密码均没有问题,发送网络请求
-				console.log('发送网络请求', values);
+				//站在3000给3000发,3000会给4000转发代理转发
+				//axios发送post请求的时候的时候,默认使用json形式编码的发送请求体参数,如果写成对象就变成Json的了,而服务器不支持json
+				axios.post('http://localhost:3000/login',`username=${username}&password=${password}`).then(
+					(response) => {console.log(response.data)},
+					(err) => {console.log(err)}
+				)
 			}
 		})
 	}
