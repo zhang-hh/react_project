@@ -7,7 +7,22 @@ import './css/login.less';
 import {reqLogin} from "../../api";
 import {createSaveUserInfoAction} from "../../redux/actions/login";
 const {Item} = Form;//从Form身上拿到Item
-class Login extends Component {
+
+//Form.create()的返回值依然是一个函数,该函数接收一个组件,随后生成一个新组件,我们渲染那个新组件
+//Form.create()返回方法是能够加工组件,生成的新组件多了一个特别的属性:form,然后将from属性传给了加工后的Login组件
+
+// export default connect(
+// 	(state) => ({userInfo:state.userInfo}),//用于映射状态
+// 	{saveUserInfo:createSaveUserInfoAction}//用于操作状态的方法
+// )(Form.create()(Login))
+
+/*从下往上走*/
+@connect(
+	(state) => ({userInfo:state.userInfo}),
+	{saveUserInfo:createSaveUserInfoAction}
+)
+@Form.create()
+ class Login extends Component {
 	/*
 			用户名/密码的的合法性要求
 				1). 必须输入
@@ -35,8 +50,8 @@ class Login extends Component {
 	};
 	//响应表单的提交
 	handleSubmit = (event) =>{
-	    event.preventDefault();//阻止表单提交的默认行为
-	//	获取表单的用户输入
+		event.preventDefault();//阻止表单提交的默认行为
+		//	获取表单的用户输入
 		this.props.form.validateFields(async (err, values) => {
 			if (!err){
 				const {username,password} = values;
@@ -48,7 +63,7 @@ class Login extends Component {
 				if (!status){
 					message.success('登录成功');
 					//console.log(data)
-				//	向redux保存信息
+					//	向redux保存信息
 					this.props.saveUserInfo(data);
 					//	页面跳转
 					this.props.history.replace('/admin');
@@ -61,6 +76,7 @@ class Login extends Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;//通过From.create加工了新组件,加工之后向Login传递了form属性
 		const {isLogin} = this.props.userInfo;
+		//如果登录了,就跳转到admin
 		if (isLogin) return <Redirect to="/admin"/>;
 		return (
 			<div id="login">
@@ -87,7 +103,7 @@ class Login extends Component {
 									{max:12,message: '用户名长度不超过12位'},
 									{min:4,message:'用户名长度不小于4位'},
 									{pattern:/^\w+$/,message:'用户名必须是英文、数字或下划线'}
-									]
+								]
 							})(
 								<Input
 									prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -120,10 +136,5 @@ class Login extends Component {
 		);
 	}
 }
-//Form.create()的返回值依然是一个函数,该函数接收一个组件,随后生成一个新组件,我们渲染那个新组件
-//Form.create()返回方法是能够加工组件,生成的新组件多了一个特别的属性:form,然后将from属性传给了加工后的Login组件
 
-export default connect(
-	(state) => ({userInfo:state.userInfo}),//用于映射状态
-	{saveUserInfo:createSaveUserInfoAction}//用于操作状态的方法
-)(Form.create()(Login))
+export default Login;//最后是暴露的经过connect包装的Login

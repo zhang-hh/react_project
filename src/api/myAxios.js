@@ -29,7 +29,7 @@ axios.interceptors.response.use(
 		Nprogress.done();
 		return response.data;
 	},
-	() => {
+	(err) => {
 		//console.log('响应失败',err.message); undefined 是非promise实例,所有在发请求的那边就会是成功的回调
 		/*这样写,会触发axios发送请求失败的回调*/
 		//return Promise.reject(err)
