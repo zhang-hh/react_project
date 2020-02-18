@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Form, Icon, Input, Button, message} from 'antd';
-import {Redirect} from 'react-router-dom';
 import {connect} from "react-redux";
-import logo from './img/logo.png'; //引入图片要用一个变量去接
+import logo from '../../static/img/logo.png'; //引入图片要用一个变量去接
 import './css/login.less';
 import {reqLogin} from "../../api";
 import {createSaveUserInfoAction} from "../../redux/actions/login";
+import check from "../check/check";
 const {Item} = Form;//从Form身上拿到Item
 
 //Form.create()的返回值依然是一个函数,该函数接收一个组件,随后生成一个新组件,我们渲染那个新组件
@@ -22,6 +22,7 @@ const {Item} = Form;//从Form身上拿到Item
 	{saveUserInfo:createSaveUserInfoAction}
 )
 @Form.create()
+@check
  class Login extends Component {
 	/*
 			用户名/密码的的合法性要求
@@ -75,9 +76,6 @@ const {Item} = Form;//从Form身上拿到Item
 	};
 	render() {
 		const { getFieldDecorator } = this.props.form;//通过From.create加工了新组件,加工之后向Login传递了form属性
-		const {isLogin} = this.props.userInfo;
-		//如果登录了,就跳转到admin
-		if (isLogin) return <Redirect to="/admin"/>;
 		return (
 			<div id="login">
 				<header className="header">

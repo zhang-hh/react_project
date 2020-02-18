@@ -15,40 +15,40 @@ export default class App extends Component {
 	}
 }
 
-// function demo(target) {
-// 	target.a = 1
-// 	target.b = 2
-// }
-//
-// @demo
-// class Myclass {}
+/*function demo(target) {
+	target.a = 1
+	target.b = 2
+}
 
-//class Myclass {}
-//demo(Myclass)
+@demo
+class Myclass {}
 
-// function demo(target){
-// 	target.a = 1
-// 	target.b = 2
-// 	return 100
-// }
-// @demo
-// class Myclass {}
-//class Myclass {}
-//Myclass = demo(Myclass)
-// console.log(Myclass)
-//
-// function test() {
-// 	function demo(target){
-// 		target.a = 1
-// 		target.b = 2
-// 		return target //这样就是直接返回这个类,不会赋值
-// 	}
-//   return demo
-// }
-//
-// @test()
-// class Myclass{}
-// //class Myclass{}
-// //test()(Myclass)
-// console.log(Myclass);
+class Myclass {}
+demo(Myclass)
+
+function demo(target){
+	target.a = 1
+	target.b = 2
+	return 100
+}
+@demo
+class Myclass {}
+class Myclass {}
+Myclass = demo(Myclass)
+console.log(Myclass)
+
+function test() {
+	function demo(target){
+		target.a = 1
+		target.b = 2
+		return target //这样就是直接返回这个类,不会赋值
+	}
+  return demo
+}
+
+@test()
+class Myclass{}
+//class Myclass{}
+//test()(Myclass)
+console.log(Myclass);*/
 
