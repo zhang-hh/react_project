@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Modal, Card, Button, Icon, Table, Input, Form} from 'antd';
+import {Modal, Card, Button, Icon, Table, Input, Form, message} from 'antd';
 import {createGetCategoryListAsyncAction,createAddCategoryListAction} from '../../redux/actions/category'
 import {connect} from "react-redux";
 import {PAGE_SIZE} from "../../config";
-import {reqUpdateCategory} from "../../api";
+import {reqAddCategory} from "../../api";
 
 const {Item} = Form;
 
@@ -17,28 +17,37 @@ const {Item} = Form;
 @Form.create() //向Category组件传递form属性,进行包装
 class Category extends Component {
 	state = { visible: false };
+	//用于显示弹窗
 	showModal = () => {
 		this.setState({
 			visible: true,
 		});
 	};
+	//确定按钮的回调
 	handleOk = () => {
 		//拿到弹窗的输入,对表单的最终验证
 		this.props.form.validateFields(async (err,values) =>{
 			if (!err){
 				console.log(values);
 			//	向服务器发送请求
-				let result = await reqUpdateCategory(values.category);
-				//向redux中存
-				this.props.addCategory(result.data)
-
+				let result = await reqAddCategory(values.category);
+				// //向redux中存
+				// this.props.addCategory(result.data)
+				const {status,msg}  = result;
+				if (!status){
+					message.success('添加商品成功');
+					this.props.categoryList();//获取商品的分类信息
+					this.props.form.resetFields();//清空输入框
+					this.setState({visible: false});//将弹窗取消
+				}else {
+					message.error(msg);
+				}
 			}
 		});
-		this.setState({
-			visible: false,
-		});
 	};
+	//取消按钮的回调
 	handleCancel = () => {
+		this.props.form.resetFields();
 		this.setState({
 			visible: false,
 		});
@@ -59,7 +68,7 @@ class Category extends Component {
 			{
 				title: '分类名',
 				dataIndex: 'name',//与数据中的属性对应,这样位置就不会出错
-				key: 'name',//唯一标识
+				key: 'name',//唯一标识,名字随意
 				width:'75%'
 			},
 			{
@@ -68,7 +77,8 @@ class Category extends Component {
 				key: 'age',
 				width: '25%',
 				align:'center',
-				//render必须是一个回调函数,他返回什么,列就会显示什么
+				//当前列如果不是单纯的展示数据,而是要展示一些按钮,超链接等结构性东西
+				// render必须是一个回调函数,他返回什么,列就会显示什么
 				render:() => <Button type='link'>修改分类</Button>
 			},
 		];
@@ -83,14 +93,14 @@ class Category extends Component {
 						dataSource={dataSource} //表格数据 这里应该是写的this.props.category
 						columns={columns}//表格列的信息
 						bordered={true} //这里直接写borderd也行
-						pagination={{pageSize:PAGE_SIZE}}
-						rowKey="_id"//底层找的永远是key,只有通过该属性才能将让他去找_id
-					/>;
+						pagination={{pageSize:PAGE_SIZE}}//分页器,用于展示每页展示多少条数据
+						rowKey="_id"//每条数据都应该有一个唯一标识,antd底层找的永远是key,只有通过该属性才能将让他去找别的
+					/>
 				</Card>
 
 				{/*弹窗  新增分类,修改分类的(复用弹框)*/}
 				<Modal
-					title="添加分类"
+					title="添加分类"//弹窗的标题
 					okText='确定'
 					cancelText='取消'
 					visible={this.state.visible} //控制弹窗是否显示
@@ -100,6 +110,7 @@ class Category extends Component {
 				{/*	在这里我们正常想到写一个input框,
 				但是普通的input框不具备验证功能,没办法对添加的分类进行验证 所以要用form表单的input*/}
 					<Form onSubmit={this.handleSubmit} className="login-form">
+						{/*form表单的根标签必须是Item*/}
 						<Item>
 							{/*声明式校验*/}
 							{getFieldDecorator('category', {//想要进行校验,就有这个获取装饰域方法
