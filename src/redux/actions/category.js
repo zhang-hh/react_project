@@ -11,7 +11,7 @@ export const createGetCategoryListAsyncAction = () =>{
 		let result = await reqCategory();
 		const {status,data,msg} = result;
 		if (status=== 0) {
-			dispath(createGetCategoryListAction(data))
+			dispath(createGetCategoryListAction(data.reverse()))
 		}else {
 			message.error(msg)
 		}

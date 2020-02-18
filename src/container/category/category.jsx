@@ -28,7 +28,6 @@ class Category extends Component {
 		//拿到弹窗的输入,对表单的最终验证
 		this.props.form.validateFields(async (err,values) =>{
 			if (!err){
-				console.log(values);
 			//	向服务器发送请求
 				let result = await reqAddCategory(values.category);
 				// //向redux中存
@@ -57,7 +56,7 @@ class Category extends Component {
 		/*变成一步,一个异步action 1.分发一个获取商品分类信息的action*/
 		//let result = await reqCategory() //请求返回的是一个promise实例
 		//console.log(result) //走了响应拦截器的失败的回调
-		this.props.categoryList()
+		this.props.categoryList();
 	}
 
 	render() {
@@ -73,13 +72,12 @@ class Category extends Component {
 			},
 			{
 				title: '操作',
-				//dataIndex: 'age',
 				key: 'age',
 				width: '25%',
 				align:'center',
 				//当前列如果不是单纯的展示数据,而是要展示一些按钮,超链接等结构性东西
 				// render必须是一个回调函数,他返回什么,列就会显示什么
-				render:() => <Button type='link'>修改分类</Button>
+				render:(title) => <Button type='link' onClick={() => {this.showModal(title)}}>修改分类</Button>
 			},
 		];
 
