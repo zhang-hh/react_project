@@ -19,11 +19,24 @@ export default class PicturesWall extends Component {
 		fileList: [],
 	};
 	//获取用户所有已经上传完的图片名字
-	getImgName = () =>{
+	getImgNames = () =>{
 		let result = [];
 	    this.state.fileList.forEach((fileObj) =>{
 	        result.push(fileObj.name)
-	    })
+	    });
+		return result;
+	};
+	//回显图片
+	setImgName = (nameArr) =>{
+		let result = [];
+		nameArr.forEach((name,index) =>{
+		    result.push({
+			    uid:-index,
+			    name,
+			    url:BASE_URL + '/upload/' + name
+		    });
+			this.setState({fileList:result})
+		})
 	};
 	//图片预览框关闭按钮的回调
 	handleCancel = () => this.setState({ previewVisible: false });
@@ -45,12 +58,12 @@ export default class PicturesWall extends Component {
 			fileList[fileList.length-1].name = name;
 			fileList[fileList.length-1].url = url;
 		}else if (file.status === 'removed'){
-			let result = await reqDeletePicture(file.name)
+			let result = await reqDeletePicture(file.name);
 			const {status,msg} = result;
 			if(status === 0) message.success('删除成功！');
 			else message.error(msg)
 		}
-		this.setState({ fileList });
+		this.setState({fileList});
 	};
 
 	render() {

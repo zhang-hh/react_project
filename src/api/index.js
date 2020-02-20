@@ -43,3 +43,8 @@ export const reqUpdateStatus = (productId,status) =>myAxios.post('/manage/produc
 export const reqDeletePicture = (name) => myAxios.post('/manage/img/delete',{name});
 //添加商品
 export const reqAddProduct = (productObj) => myAxios.post('/manage/product/add',productObj);
+//根据商品ID获取商品的信息
+export const reqProductById = (productId) =>myAxios.get('/manage/product/info', {params:{productId}});
+//修改商品 比添加商品多了一个_id
+export const reqUpdateProduct = (productObj) => myAxios.post('/manage/product/update',productObj);
+
