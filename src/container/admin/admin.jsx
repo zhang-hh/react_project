@@ -3,18 +3,20 @@ import {connect} from "react-redux";
 import {Switch,Redirect,Route} from 'react-router-dom'
 import {createDeleteUserInfoAction} from '../../redux/actions/login'
 import check from "../check/check";
-import './css/admin.less'
+import './admin.less'
 import Header from "../header/header";
 import {Layout} from 'antd';
 import LeftNav from "../left-nav/left-nav";
 import Home from '../../components/home/home'
-import Category from '../category/category'
-import Product from '../product/product'
-import Role from '../role/role'
-import User from '../user/user'
-import Bar from '../../components/bar/bar'
-import Line from '../../components/line/line'
-import Pie from '../../components/pie/pie'
+import Category from '../category/category';
+import Product from '../product/product';
+import Detail from "../product/detail";
+import AddUpdate from "../product/add_update";
+import Role from '../role/role';
+import User from '../user/user';
+import Bar from '../../components/bar/bar';
+import Line from '../../components/line/line';
+import Pie from '../../components/pie/pie';
 const {Footer, Sider, Content } = Layout;
 
 // export default connect(
@@ -43,9 +45,12 @@ class Admin extends Component {
 					<Header/>
 					<Content className="content">
 						<Switch>
-						<Route path='/admin/home' component={Home}/>
-						<Route path='/admin/prod_about/category' component={Category}/>
-							<Route path='/admin/prod_about/product' component={Product}/>
+							<Route path='/admin/home' component={Home}/>
+							<Route path='/admin/prod_about/category' component={Category}/>
+							<Route path='/admin/prod_about/product' component={Product} exact/>
+							<Route path='/admin/prod_about/product/detail/:id' component={Detail}/>
+							<Route path='/admin/prod_about/product/add_update' component={AddUpdate} exact/>
+							<Route path='/admin/prod_about/product/add_update/:id' component={AddUpdate}/>
 							<Route path='/admin/role' component={Role}/>
 							<Route path='/admin/user' component={User}/>
 							<Route path='/admin/charts/bar' component={Bar}/>

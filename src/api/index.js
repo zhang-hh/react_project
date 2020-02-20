@@ -11,7 +11,7 @@ export const reqLogin = (username, password) =>
 export const reqWeather = () => {
 	const url = `${WEATHER_URL}?location=张北&output=json&ak=${WEATHER_AK}`;
 	//jsonp 里面的回调是异步回调,直接就return了
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		jsonp(url, (err, data) => {
 			if (!err) {
 				const {dayPictureUrl, temperature} = data.results[0].weather_data[0];
@@ -26,8 +26,20 @@ export const reqWeather = () => {
 	})
 
 };
-
-//请求分类列表
+//请求分类列表(假分页)
 export const reqCategory = () => myAxios.get('/manage/category/list');
-//请求更新分类列表
+//请求添加分类列表
 export const reqAddCategory = (categoryName) =>myAxios.post('/manage/category/add', {categoryName});
+//请求更新分类列表
+export const reqUpdateCategory = (categoryId,categoryName) =>myAxios.post('/manage/category/update', {categoryId,categoryName});
+//请求商品分页列表(真分页)
+export const reqProductList = (pageNum,pageSize) =>myAxios.get('/manage/product/list', {params:{pageNum,pageSize}});
+//搜索产品分页列表
+export const reqSearchList = (searchType,keyWord,pageNum,pageSize) =>
+	myAxios.get('/manage/product/search', {params:{[searchType]:keyWord,pageNum,pageSize}});
+// 对商品进行上架/下架处理
+export const reqUpdateStatus = (productId,status) =>myAxios.post('/manage/product/updateStatus', {productId,status});
+//删除商品图片
+export const reqDeletePicture = (name) => myAxios.post('/manage/img/delete',{name});
+//添加商品
+export const reqAddProduct = (productObj) => myAxios.post('/manage/product/add',productObj);

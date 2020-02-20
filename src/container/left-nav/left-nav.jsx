@@ -19,6 +19,7 @@ class LeftNav extends Component {
 		let {pathname} = this.props.location;
 		//登录成功的时候会出现/admin
 		if (pathname ==='/admin') pathname ='/admin/home';
+		if (pathname.indexOf('/product')) pathname='/admin/product';
 		let currentKey = pathname.split('/').reverse()[0];
 		menuList.forEach((menuObj) =>{
 		    if (menuObj.children instanceof Array){
@@ -38,7 +39,7 @@ class LeftNav extends Component {
 		//console.log('left-Nav');//只会出现一次,也就是this.getTitle只会调用一次,如果第一次是/admin的时候就会出现错误
 		if (!this.props.title) this.getTitle()
 	}
-
+	//创建左侧菜单
 	getMenuListNode = (menuList) =>{
 	    return menuList.map((item) =>{
 	        if(!item.children){
@@ -71,6 +72,8 @@ class LeftNav extends Component {
 	render() {
 		let  path = this.props.location.pathname;// /admin/
 		let seletedKey = path.split('/').reverse()[0];
+		//如果地址中包含着/product,那么就选中商品管理
+		if (path.indexOf('/product')!== -1) seletedKey ='product';
 		let openKey = path.split('/').reverse(); //这是一个数组
 
 		return (
@@ -84,7 +87,7 @@ class LeftNav extends Component {
 						mode="inline"
 						theme="dark"
 						//defaultSelectedKeys={[seletedKey]} 这是只能是设置一次
-						selectedKeys={[seletedKey]} //这个是根据最后一次
+						selectedKeys={[seletedKey]} //这个是根据最后一次的变化设置的
 						defaultOpenKeys={openKey}
 					>
 						{this.getMenuListNode(menuList)}
