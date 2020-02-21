@@ -51,7 +51,7 @@ class Category extends Component {
 				if (!status){
 					message.success('操作成功');
 					this.props.categoryList();//获取商品的分类信息
-					this.props.form.resetFields();//清空输入框
+					this.props.form.resetFields();//清空输入框,重置表单
 					this.setState({visible: false});//将弹窗取消
 				}else {
 					message.error(msg);

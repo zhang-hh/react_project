@@ -14,7 +14,6 @@ const { SubMenu,Item } = Menu;
 @withRouter //非路由组件想用路由组建的属性要用withRouter包装
 class LeftNav extends Component {
 	getTitle = () =>{
-		console.log('redux里面没有title了');
 		let title = '';
 		let {pathname} = this.props.location;
 		//登录成功的时候会出现/admin
